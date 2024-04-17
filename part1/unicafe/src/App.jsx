@@ -9,13 +9,18 @@ const Button = ({ text, handleClick }) => {
 };
 
 const StatisticDisplay = ({ good, neutral, bad }) => {
+  const avg = (good - bad) / (good + neutral + bad);
+  const posRate = (good) / (good + neutral + bad);
   return (
     <div>
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>average {avg}</p>
+      <p>positive {posRate}</p>
     </div>);
 };
+
 
 const App = () => {
   // save clicks of each button to its own state
