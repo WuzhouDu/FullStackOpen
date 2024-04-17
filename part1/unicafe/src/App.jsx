@@ -8,24 +8,37 @@ const Button = ({ text, handleClick }) => {
   );
 };
 
-const StatisticLine = ({text, value}) => <p>{text} {value}</p>;
+const StatisticLine = ({ text, value }) => (
+  <>
+    <tr>
+      <td>
+        {text}
+      </td>
+      <td>
+        {value}
+      </td>
+    </tr>
+  </>
+);
 
 const StatisticDisplay = ({ good, neutral, bad }) => {
   const avg = (good - bad) / (good + neutral + bad);
-  const posRate = (good) / (good + neutral + bad);
+  const posRate = 100 * (good) / (good + neutral + bad) + "%";
   if (good + neutral + bad === 0) {
     return <p>No feedback given</p>;
   }
 
   else {
     return (
-      <div>
-        <StatisticLine text="good" value={good} />
-        <StatisticLine text="neutral" value={neutral} />
-        <StatisticLine text="bad" value={bad} />
-        <StatisticLine text="average" value={avg} />
-        <StatisticLine text="positive " value={posRate} />
-      </div>);
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={good} />
+          <StatisticLine text="neutral" value={neutral} />
+          <StatisticLine text="bad" value={bad} />
+          <StatisticLine text="average" value={avg} />
+          <StatisticLine text="positive " value={posRate} />
+        </tbody>
+      </table>);
   }
 };
 
