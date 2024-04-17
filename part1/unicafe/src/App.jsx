@@ -11,14 +11,20 @@ const Button = ({ text, handleClick }) => {
 const StatisticDisplay = ({ good, neutral, bad }) => {
   const avg = (good - bad) / (good + neutral + bad);
   const posRate = (good) / (good + neutral + bad);
-  return (
-    <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>average {avg}</p>
-      <p>positive {posRate}</p>
-    </div>);
+  if (good + neutral + bad === 0) {
+    return <p>No feedback given</p>;
+  }
+
+  else {
+    return (
+      <div>
+        <p>good {good}</p>
+        <p>neutral {neutral}</p>
+        <p>bad {bad}</p>
+        <p>average {avg}</p>
+        <p>positive {posRate}</p>
+      </div>);
+  }
 };
 
 
@@ -40,7 +46,7 @@ const App = () => {
       <Button text="Bad" handleClick={onHandleClickPlusOneMaker(bad, setBad)} ></Button>
 
       <Header text="statistics"></Header>
-      <StatisticDisplay good={good} neutral={neutral} bad={bad}/>
+      <StatisticDisplay good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
