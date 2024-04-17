@@ -8,6 +8,8 @@ const Button = ({ text, handleClick }) => {
   );
 };
 
+const StatisticLine = ({text, value}) => <p>{text} {value}</p>;
+
 const StatisticDisplay = ({ good, neutral, bad }) => {
   const avg = (good - bad) / (good + neutral + bad);
   const posRate = (good) / (good + neutral + bad);
@@ -18,11 +20,11 @@ const StatisticDisplay = ({ good, neutral, bad }) => {
   else {
     return (
       <div>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-        <p>average {avg}</p>
-        <p>positive {posRate}</p>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="average" value={avg} />
+        <StatisticLine text="positive " value={posRate} />
       </div>);
   }
 };
