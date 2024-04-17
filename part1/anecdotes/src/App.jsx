@@ -10,9 +10,15 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
-  ]
+  ];
+
+  const votesInit = {};
+  for (let i = 0; i < anecdotes.length; i++) {
+    votesInit[i] = 0;
+  }
 
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(votesInit);
 
   function onNextAnecdote() {
     let nextIndex = Math.floor(Math.random() * anecdotes.length);
@@ -22,14 +28,25 @@ const App = () => {
     setSelected(nextIndex);
   }
 
+  function onVote() {
+    const newVotes = {...votes};
+    // console.log("before", newVotes);
+    newVotes[selected] += 1;
+    // console.log("after", newVotes);
+    setVotes(newVotes);
+  }
+
   return (
     <div>
       <p>{anecdotes[selected]}</p>
-      <Button onHandleClick={onNextAnecdote}/>
+      <p>has {votes[selected]} vote</p>
+      <Button onHandleClick={onNextAnecdote} text="next anecdote"/>
+      <Button onHandleClick={onVote} text="vote" />
+
     </div>
   )
 }
 
-const Button = ({onHandleClick}) => <button onClick={onHandleClick}>next anecdote</button>
+const Button = ({onHandleClick, text}) => <button onClick={onHandleClick}>{text}</button>
 
 export default App
