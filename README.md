@@ -1,2 +1,2 @@
 # FullStackOpen
-A homework repository of fullstack open course
+A homework repository of [fullstack open course](https://fullstackopen.com/en)
