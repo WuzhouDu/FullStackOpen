@@ -17,6 +17,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
@@ -25,10 +30,14 @@ const App = () => {
 }
 
 const Course = ({ course }) => {
+  const sumVal = course.parts.reduce((prev, cur) => {
+    return prev + cur.exercises;
+  }, 0);
   return (
     <>
       <Header text={course.name}></Header >
       <Content contents={course.parts} />
+      <Sum value={sumVal} />
     </>
   );
 };
@@ -42,5 +51,7 @@ const Content = ({ contents }) => {
   )
 }
 const Part = ({ name, exercises }) => <p>{name} {exercises}</p>;
+
+const Sum = ({ value }) => <strong>total of {value} exercises</strong>;
 
 export default App
