@@ -2,24 +2,32 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', phone: "1232942" }
   ])
   const [newName, setNewName] = useState('')
+  const [newPhone, setNewPhone] = useState('')
+
 
   const handleTypingName = (e) => {
     setNewName(e.target.value);
   }
 
+  const handleTypingPhone = (e) => {
+    setNewPhone(e.target.value);
+  }
+
   const handleAddName = (event) => {
     event.preventDefault();
     if (persons.every((person) => !areTheseObjectsEqual(person, { name: newName }))) {
-      setPersons(persons.concat({ name: newName }));
+      setPersons(persons.concat({ name: newName, phone: newPhone }));
+      
     }
     else {
       window.alert(`${newName} is already added to phonebook`);
     }
 
     setNewName('');
+    setNewPhone('');
   }
   return (
     <div>
@@ -28,12 +36,13 @@ const App = () => {
         <div>
           name: <input value={newName} onChange={handleTypingName} />
         </div>
+        <div>number: <input value={newPhone} onChange={handleTypingPhone} /></div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <p key={person.name}>{person.name}</p>)}
+      {persons.map(person => <p key={person.name}>{person.name} {person.phone}</p>)}
     </div>
   )
 }
