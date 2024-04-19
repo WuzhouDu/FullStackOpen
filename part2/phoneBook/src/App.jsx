@@ -8,6 +8,7 @@ import Notification from './Notification.jsx';
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [message, setMessage] = useState('');
+  const [red, setRed] = useState(false);
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchName, setSearchName] = useState('')
@@ -35,6 +36,7 @@ const App = () => {
           setPersons([...persons, res.data]);
           setTimeout(() => {
             setMessage(`add new person ${newElement.name}`);
+            setRed(false);
           }, 1000);
         });
     }
@@ -45,7 +47,13 @@ const App = () => {
           setPersons(persons.map(each => each.id != existedElement.id ? each : res.data));
           setTimeout(() => {
             setMessage(`update person ${newElement.name}`);
+            setRed(false);
           }, 1000);
+        })
+        .catch(err => {
+          setMessage(`ERROR: person ${newElement.name} is deleted from the server`);
+          setRed(true);
+          setPersons(persons.filter(each => each.id != existedElement.id));
         });
     }
   }
@@ -83,7 +91,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={message} />
+      <Notification message={message} red={red} />
       <Filter searchName={searchName} handleChange={handleSearchChange} />
 
       <h2>add a new</h2>
