@@ -22,27 +22,41 @@ const App = () => {
 
   const handleAddName = (event) => {
     event.preventDefault();
-    // if (persons.every((person) => !areTheseObjectsEqual(person, { name: newName }))) {
-    //   setPersons(persons.concat({ name: newName, number: newPhone }));
-    // }
-    // else {
-    //   window.alert(`${newName} is already added to phonebook`);
-    // }
-
-    // setNewName('');
-    // setNewPhone('');
-    const newElement = {name: newName, number: newPhone};
-    personService
-      .addNewPhoneBookElement(newElement)
-      .then(res => {
-        console.log(res);
-        setNewName('');
-        setPersons([...persons, res.data]);
-      });
+    const newElement = { name: newName, number: newPhone };
+    if (persons.every(eachPerson => eachPerson.name !== newElement.name)) {
+      personService
+        .addNewPhoneBookElement(newElement)
+        .then(res => {
+          console.log(res);
+          setNewName('');
+          setNewPhone('');
+          setPersons([...persons, res.data]);
+        });
+    }
+    else {
+      window.alert(`${newName} is already added to phonebook`);
+      setNewName('');
+      setNewPhone('');
+    }
   }
 
   const handleSearchChange = (e) => {
     setSearchName(e.target.value);
+  }
+
+  const onDeletePersonHandle = (deletedPerson) => {
+    // console.log(`delete id ${id}`);
+    if (window.confirm(`Delete ${deletedPerson.name} ?`)) {
+      personService
+        .deletePhoneBookElement(deletedPerson.id)
+        .then(res => {
+          console.log(res);
+          setPersons(persons.filter(each => each.id !== deletedPerson.id));
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 
   useEffect(() => {
@@ -54,6 +68,7 @@ const App = () => {
         setPersons(res.data);
       })
   }, []);
+
 
   return (
     <div>
@@ -67,7 +82,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons persons={persons} searchName={searchName}/>
+      <Persons persons={persons} searchName={searchName} onDeleteHandle={onDeletePersonHandle} />
     </div>
   )
 }

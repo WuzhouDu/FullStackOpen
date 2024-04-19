@@ -11,4 +11,9 @@ const addNewPhoneBookElement = (newElement) => {
         .post(baseURL, newElement);
 }
 
-export default {fetchAll, addNewPhoneBookElement};
+const deletePhoneBookElement = (id) => {
+    return axios
+            .delete(`${baseURL}/${id}`);
+}
+
+export default {fetchAll, addNewPhoneBookElement, deletePhoneBookElement};
