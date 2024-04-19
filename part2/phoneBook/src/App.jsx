@@ -3,10 +3,11 @@ import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons.jsx'
 import personService from './persons.js'
+import Notification from './Notification.jsx';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-
+  const [message, setMessage] = useState('');
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchName, setSearchName] = useState('')
@@ -32,6 +33,9 @@ const App = () => {
           setNewName('');
           setNewPhone('');
           setPersons([...persons, res.data]);
+          setTimeout(() => {
+            setMessage(`add new person ${newElement.name}`);
+          }, 1000);
         });
     }
     else if (window.confirm(`${newName} is already added, replace the older one with the new one?`)) {
@@ -39,7 +43,10 @@ const App = () => {
         .updateCurrentPhone(existedElement.id, newElement)
         .then(res => {
           setPersons(persons.map(each => each.id != existedElement.id ? each : res.data));
-        })
+          setTimeout(() => {
+            setMessage(`update person ${newElement.name}`);
+          }, 1000);
+        });
     }
   }
 
@@ -76,7 +83,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-
+      <Notification message={message} />
       <Filter searchName={searchName} handleChange={handleSearchChange} />
 
       <h2>add a new</h2>
