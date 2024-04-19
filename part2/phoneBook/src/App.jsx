@@ -22,16 +22,23 @@ const App = () => {
 
   const handleAddName = (event) => {
     event.preventDefault();
-    if (persons.every((person) => !areTheseObjectsEqual(person, { name: newName }))) {
-      setPersons(persons.concat({ name: newName, number: newPhone }));
+    // if (persons.every((person) => !areTheseObjectsEqual(person, { name: newName }))) {
+    //   setPersons(persons.concat({ name: newName, number: newPhone }));
+    // }
+    // else {
+    //   window.alert(`${newName} is already added to phonebook`);
+    // }
 
-    }
-    else {
-      window.alert(`${newName} is already added to phonebook`);
-    }
-
-    setNewName('');
-    setNewPhone('');
+    // setNewName('');
+    // setNewPhone('');
+    const newElement = {name: newName, number: newPhone};
+    axios
+      .post("http://localhost:3001/persons", newElement)
+      .then(res => {
+        console.log(res);
+        setNewName('');
+        setPersons([...persons, res.data]);
+      });
   }
 
   const handleSearchChange = (e) => {
