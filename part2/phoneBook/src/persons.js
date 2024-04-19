@@ -16,4 +16,9 @@ const deletePhoneBookElement = (id) => {
             .delete(`${baseURL}/${id}`);
 }
 
-export default {fetchAll, addNewPhoneBookElement, deletePhoneBookElement};
+const updateCurrentPhone = (id, updatedElement) => {
+    return axios
+            .put(`${baseURL}/${id}`, updatedElement);
+}
+
+export default {fetchAll, addNewPhoneBookElement, deletePhoneBookElement, updateCurrentPhone};

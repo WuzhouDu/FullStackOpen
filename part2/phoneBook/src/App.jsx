@@ -23,7 +23,8 @@ const App = () => {
   const handleAddName = (event) => {
     event.preventDefault();
     const newElement = { name: newName, number: newPhone };
-    if (persons.every(eachPerson => eachPerson.name !== newElement.name)) {
+    const existedElement = persons.find(each => each.name === newName);
+    if (!existedElement) {
       personService
         .addNewPhoneBookElement(newElement)
         .then(res => {
@@ -33,10 +34,12 @@ const App = () => {
           setPersons([...persons, res.data]);
         });
     }
-    else {
-      window.alert(`${newName} is already added to phonebook`);
-      setNewName('');
-      setNewPhone('');
+    else if (window.confirm(`${newName} is already added, replace the older one with the new one?`)) {
+      personService
+        .updateCurrentPhone(existedElement.id, newElement)
+        .then(res => {
+          setPersons(persons.map(each => each.id != existedElement.id ? each : res.data));
+        })
     }
   }
 
