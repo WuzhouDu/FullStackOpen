@@ -49,6 +49,8 @@ const App = () => {
             setMessage(`update person ${newElement.name}`);
             setRed(false);
           }, 1000);
+          setNewName('');
+          setNewPhone('');
         })
         .catch(err => {
           setMessage(`ERROR: person ${newElement.name} is deleted from the server`);
