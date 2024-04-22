@@ -12,9 +12,23 @@ const totalLikes = (blogs) => {
             return prev + cur.likes;
         }, 0);
     }
+};
+
+const favoriteBlog = (blogs) => {
+    if (!blogs) return undefined;
+    let result;
+    let maxLike = -1;
+    blogs.forEach((each) => {
+        if (each.likes > maxLike) {
+            result = {title: each.title, author: each.author, likes: each.likes};
+            maxLike = each.likes;
+        }
+    });
+    return result;
 }
 
 module.exports = {
     dummy,
     totalLikes,
+    favoriteBlog,
 }
