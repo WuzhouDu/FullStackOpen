@@ -38,6 +38,10 @@ const App = () => {
             setMessage(`add new person ${newElement.name}`);
             setRed(false);
           }, 1000);
+        }).catch(err => {
+          console.log(err);
+          setMessage(err.response.data.error);
+          setRed(true);
         });
     }
     else if (window.confirm(`${newName} is already added, replace the older one with the new one?`)) {
@@ -53,9 +57,9 @@ const App = () => {
           setNewPhone('');
         })
         .catch(err => {
-          setMessage(`ERROR: person ${newElement.name} is deleted from the server`);
+          setMessage(err.response.data.error);
           setRed(true);
-          setPersons(persons.filter(each => each.id != existedElement.id));
+          // setPersons(persons.filter(each => each.id != existedElement.id));
         });
     }
   }
