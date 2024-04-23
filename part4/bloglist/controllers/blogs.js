@@ -35,13 +35,19 @@ blogsRouter.post('/', async (req, res) => {
 });
 
 blogsRouter.delete('/:id', async (req, res) => {
+    const decodedObject = jwt.verify(req.token, process.env.SECRET);
+    if (!decodedObject.id) {
+        return res.status(401).json({ error: 'token invalid' });
+    }
+
     const deletedId = req.params.id;
-    const deletedBlog = await Blog.findByIdAndDelete(deletedId);
-    if (deletedBlog) {
+    const deletedBlog = await Blog.findById(deletedId);
+    if (deletedBlog.user.toString() === decodedObject.id.toString()) {
+        await Blog.findByIdAndDelete(deletedId);
         return res.status(200).send();
     }
     else {
-        res.status(400).send({ error: "deleted content does not exist" });
+        res.status(401).send({ error: "wrong authentication, not allowed to delete" });
     }
 });
 
