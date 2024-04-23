@@ -3,6 +3,7 @@ const User = require('../models/user');
 const blogsRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
+const userExtractor = require('../middlewares/tokenExtractor');
 
 
 blogsRouter.get('/', async (req, res) => {
@@ -10,15 +11,11 @@ blogsRouter.get('/', async (req, res) => {
     res.json(users);
 });
 
-blogsRouter.post('/', async (req, res) => {
+blogsRouter.post('/', userExtractor, async (req, res) => {
     const body = req.body;
 
     // this line can possibly incur error. handled by error handler error.name = 'JsonWebTokenError'
-    const decodedObject = jwt.verify(req.token, process.env.SECRET);
-    if (!decodedObject.id) {
-        return res.status(401).json({ error: 'token invalid' });
-    }
-    const user = await User.findById(decodedObject.id);
+    const user = req.user;
     const blog = new Blog({
         url: body.url,
         title: body.title,
@@ -34,15 +31,11 @@ blogsRouter.post('/', async (req, res) => {
     res.status(201).json(savedBlog);
 });
 
-blogsRouter.delete('/:id', async (req, res) => {
-    const decodedObject = jwt.verify(req.token, process.env.SECRET);
-    if (!decodedObject.id) {
-        return res.status(401).json({ error: 'token invalid' });
-    }
-
+blogsRouter.delete('/:id', userExtractor, async (req, res) => {
+    const user = req.user;
     const deletedId = req.params.id;
     const deletedBlog = await Blog.findById(deletedId);
-    if (deletedBlog.user.toString() === decodedObject.id.toString()) {
+    if (deletedBlog.user.toString() === user.id.toString()) {
         await Blog.findByIdAndDelete(deletedId);
         return res.status(200).send();
     }

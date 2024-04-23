@@ -10,7 +10,6 @@ const userRouter = require('./controllers/users');
 const errorhandler = require('./middlewares/errorhandler');
 const loginRouter = require('./controllers/login');
 const morgan = require('morgan');
-const tokenExtractor = require('./middlewares/tokenExtractor');
 
 morgan.token('body', (req, res) => {
     if (req.method === 'POST' || req.method === 'PUT') {
@@ -31,7 +30,6 @@ mongoose.connect(config.MONGODB_URI).then(ok => {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 app.use(cors());
 app.use(express.json());
-app.use(tokenExtractor);
 app.use('/api/blogs', blogsRouter);
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
