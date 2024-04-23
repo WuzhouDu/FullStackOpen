@@ -5,7 +5,15 @@ const blogSchema = new mongoose.Schema({
     author: String,
     url: String,
     likes: Number
-})
+});
+
+blogSchema.set('toJSON', {
+    transform: (doc, returned) => {
+        returned.id = returned._id.toString();
+        delete returned.__v;
+        delete returned._id;
+    }
+});
 
 const Blog = mongoose.model('Blog', blogSchema);
 
