@@ -4,13 +4,6 @@ const blogsRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
 
-const extractTokenFrom = (request) => {
-    const authorization = request.get('authorization');
-    if (authorization && authorization.startsWith('Bearer ')) {
-        return authorization.replace('Bearer ', '');
-    }
-    return null;
-}
 
 blogsRouter.get('/', async (req, res) => {
     const users = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 });
@@ -21,7 +14,7 @@ blogsRouter.post('/', async (req, res) => {
     const body = req.body;
 
     // this line can possibly incur error. handled by error handler error.name = 'JsonWebTokenError'
-    const decodedObject = jwt.verify(extractTokenFrom(req), process.env.SECRET);
+    const decodedObject = jwt.verify(req.token, process.env.SECRET);
     if (!decodedObject.id) {
         return res.status(401).json({ error: 'token invalid' });
     }
