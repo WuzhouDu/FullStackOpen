@@ -32,9 +32,15 @@ const App = () => {
     }
   }
 
+  const handleLogout = () => {
+    setUser(null);
+    window.localStorage.removeItem("loggedBlogappUser");
+    blogService.setToken('');
+  }
+
   const loginForm = () => (
     <div>
-    <h1>log in to application</h1>
+      <h1>log in to application</h1>
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -53,7 +59,10 @@ const App = () => {
     blogs.length === 0 ? null :
       <div>
         <h2>blogs</h2>
-        <p>{user.name} logged in</p>
+        <div>
+          {user.name} logged in
+          <button onClick={handleLogout}>log out</button>
+        </div>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
