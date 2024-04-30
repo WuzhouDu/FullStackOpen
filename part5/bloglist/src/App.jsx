@@ -1,27 +1,27 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
-import loginService from './services/login'
-import Notification from './components/Notification'
-import Togglable from './components/Toggable'
-import CreateForm from './components/CreateForm'
+import { useState, useEffect } from 'react';
+import Blog from './components/Blog';
+import blogService from './services/blogs';
+import loginService from './services/login';
+import Notification from './components/Notification';
+import Togglable from './components/Toggable';
+import CreateForm from './components/CreateForm';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [blogs, setBlogs] = useState([]);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [notification, setNotification] = useState({ text: '', color: 'green' });
   const [user, setUser] = useState(null);
 
 
-  const handleClick = async ({title, author, url}) => {
+  const handleClick = async ({ title, author, url }) => {
     const newBlog = await blogService.create({ title, author, url, likes: 0 });
     setBlogs(blogs.concat(newBlog).sort((a, b) => a.likes - b.likes));
-    setNotification({ color: "green", text: `a new blog ${newBlog.title} by ${newBlog.author}` });
+    setNotification({ color: 'green', text: `a new blog ${newBlog.title} by ${newBlog.author}` });
     setTimeout(() => {
-      setNotification({ ...notification, text: "" });
+      setNotification({ ...notification, text: '' });
     }, 2000);
-  }
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -37,19 +37,19 @@ const App = () => {
       );
     }
     catch (exception) {
-      setNotification({ color: "red", text: "Wrong Credentials" });
-      console.error(`Wrong credentials!`);
+      setNotification({ color: 'red', text: 'Wrong Credentials' });
+      console.error('Wrong credentials!');
       setTimeout(() => {
-        setNotification({ ...notification, text: "" });
+        setNotification({ ...notification, text: '' });
       }, 2000);
     }
-  }
+  };
 
   const handleLogout = () => {
     setUser(null);
-    window.localStorage.removeItem("loggedBlogappUser");
+    window.localStorage.removeItem('loggedBlogappUser');
     blogService.setToken('');
-  }
+  };
 
   const loginForm = () => (
     <div>
@@ -85,7 +85,7 @@ const App = () => {
   const handleLike = (updatedBlog) => {
     setBlogs(blogs.map((current) => {
       if (current.id === updatedBlog.id) {
-        return updatedBlog;
+        return {...current, likes: updatedBlog.likes};
       }
       return current;
     }).sort((a, b) => a.likes - b.likes));
@@ -93,22 +93,22 @@ const App = () => {
 
   const handleRemove = (id) => {
     setBlogs(blogs.filter(each => each.id !== id).sort((a,b) => a.id - b.id));
-  }
+  };
 
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs.sort((a, b) => a.likes - b.likes))
-    )
+    );
   }, []);
 
   useEffect(() => {
-    const loggedUserJson = window.localStorage.getItem("loggedBlogappUser");
+    const loggedUserJson = window.localStorage.getItem('loggedBlogappUser');
     if (loggedUserJson) {
       const usr = JSON.parse(loggedUserJson);
       setUser(usr);
       blogService.setToken(usr.token);
-    };
+    }
   }, []);
 
   return (
@@ -124,7 +124,7 @@ const App = () => {
 
       }
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
