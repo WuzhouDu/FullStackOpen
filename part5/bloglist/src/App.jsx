@@ -3,12 +3,13 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import Togglable from './components/Toggable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [notification, setNotification] = useState({text: '', color: 'green'});
+  const [notification, setNotification] = useState({ text: '', color: 'green' });
   const [user, setUser] = useState(null);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -40,10 +41,10 @@ const App = () => {
       );
     }
     catch (exception) {
-      setNotification({color: "red", text: "Wrong Credentials"});
+      setNotification({ color: "red", text: "Wrong Credentials" });
       console.error(`Wrong credentials!`);
       setTimeout(() => {
-        setNotification({...notification, text: ""});
+        setNotification({ ...notification, text: "" });
       }, 2000);
     }
   }
@@ -127,7 +128,9 @@ const App = () => {
       {user === null ? loginForm() :
         <div>
           {blogList()}
-          {CreateForm()}
+          <Togglable buttonLabel="create blog">
+            {CreateForm()}
+          </Togglable>
         </div>
 
       }
