@@ -2,7 +2,7 @@ import { useState } from "react";
 import blogService from '../services/blogs';
 
 
-const Blog = ({ blog, handleLike, handleRemove }) => {
+const Blog = ({ blog, handleLike, handleRemove, currentUser }) => {
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -23,17 +23,26 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
     }
 
     const internalHandleRemove = async () => {
-        if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
+        if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
             await blogService.remove(blog.id);
             handleRemove(blog.id);
         }
+    }
+
+    const removeButton = () => {
+        return currentUser.username === blog.user.username ? 
+            (<div>
+                <button onClick={internalHandleRemove}>remove</button>
+            </div>)
+            :
+            null
     }
 
     return detail
         ? (
             <div style={blogStyle}>
                 <div>
-                    {blog.title} <button onClick={toggleShowDetail}>hide</button>
+                    {blog.title} by {blog.author}<button onClick={toggleShowDetail}>hide</button>
                 </div>
                 <div>
                     {blog.url}
@@ -42,11 +51,9 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
                     {blog.likes} <button onClick={internalHandleLike}>like</button>
                 </div>
                 <div>
-                    {blog.author}
+                    {blog.user.name}
                 </div>
-                <div>
-                    <button onClick={internalHandleRemove}>remove</button>
-                </div>
+                {removeButton()}
             </div>
         )
         : (
