@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState({text: '', color: 'green'});
   const [user, setUser] = useState(null);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -18,7 +19,11 @@ const App = () => {
     setAuthor('');
     setTitle('');
     setUrl('');
-    setBlogs(blogs.concat(newBlog))
+    setBlogs(blogs.concat(newBlog));
+    setNotification({ color: "green", text: `a new blog ${newBlog.title} by ${newBlog.author}` });
+    setTimeout(() => {
+      setNotification({ ...notification, text: "" });
+    }, 2000);
   }
 
   const handleLogin = async (event) => {
@@ -35,10 +40,10 @@ const App = () => {
       );
     }
     catch (exception) {
-      setNotification(`Wrong credentials!`);
+      setNotification({color: "red", text: "Wrong Credentials"});
       console.error(`Wrong credentials!`);
       setTimeout(() => {
-        setNotification('');
+        setNotification({...notification, text: ""});
       }, 2000);
     }
   }
@@ -118,7 +123,7 @@ const App = () => {
 
   return (
     <div>
-      {notification}
+      <Notification text={notification.text} color={notification.color} />
       {user === null ? loginForm() :
         <div>
           {blogList()}
