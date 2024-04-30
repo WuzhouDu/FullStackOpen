@@ -77,7 +77,7 @@ const App = () => {
           <button onClick={handleLogout}>log out</button>
         </div>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} handleRemove={handleRemove} />
         )}
       </div>
   );
@@ -89,6 +89,10 @@ const App = () => {
       }
       return current;
     }).sort((a, b) => a.likes - b.likes));
+  };
+
+  const handleRemove = (id) => {
+    setBlogs(blogs.filter(each => each.id !== id).sort((a,b) => a.id - b.id));
   }
 
 
