@@ -77,10 +77,19 @@ const App = () => {
           <button onClick={handleLogout}>log out</button>
         </div>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} />
         )}
       </div>
   );
+
+  const handleLike = (updatedBlog) => {
+    setBlogs(blogs.map((current) => {
+      if (current.id === updatedBlog.id) {
+        return updatedBlog;
+      }
+      return current;
+    }));
+  }
 
 
   useEffect(() => {

@@ -1,9 +1,10 @@
-PUT http://localhost:3003/api/blogs/66276d88ce7645d06126f76b
+PUT http://localhost:3003/api/blogs/6627d74976048e1dfc686920
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY2Mjc5ZWZkNWU4MzUyODU1NjVlNjgwYiIsImlhdCI6MTcxNDQ2NTg1NH0.vcCGwyBj9RoIiN70Xj_N2WnQqRfe9frKSmLOCftEHys
 
 {
-    "title": "test blog",
-    "author": "dwz2",
+    "title": "test blog 1",
+    "author": "anyway",
     "url": "not real url",
-    "likes": 13
+    "likes": 2
 }
