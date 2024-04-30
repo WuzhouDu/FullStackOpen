@@ -18,7 +18,7 @@ const Blog = ({ blog, handleLike }) => {
     }
 
     const internalHandleLike = async () => {
-        const updatedOne = await blogService.update(blog.id, { title: blog.title, url: blog.url, likes: blog.likes + 1, author: blog.author });
+        const updatedOne = await blogService.update(blog.id, { title: blog.title, url: blog.url, likes: Number(blog.likes) + 1, author: blog.author });
         handleLike(updatedOne);
     }
 

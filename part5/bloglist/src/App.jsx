@@ -15,8 +15,8 @@ const App = () => {
 
 
   const handleClick = async ({title, author, url}) => {
-    const newBlog = await blogService.create({ title, author, url });
-    setBlogs(blogs.concat(newBlog));
+    const newBlog = await blogService.create({ title, author, url, likes: 0 });
+    setBlogs(blogs.concat(newBlog).sort((a, b) => a.likes - b.likes));
     setNotification({ color: "green", text: `a new blog ${newBlog.title} by ${newBlog.author}` });
     setTimeout(() => {
       setNotification({ ...notification, text: "" });
@@ -88,13 +88,13 @@ const App = () => {
         return updatedBlog;
       }
       return current;
-    }));
+    }).sort((a, b) => a.likes - b.likes));
   }
 
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(blogs.sort((a, b) => a.likes - b.likes))
     )
   }, []);
 
