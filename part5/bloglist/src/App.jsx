@@ -9,6 +9,17 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [notification, setNotification] = useState('');
   const [user, setUser] = useState(null);
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
+
+  const handleClick = async () => {
+    const newBlog = await blogService.create({ title, author, url });
+    setAuthor('');
+    setTitle('');
+    setUrl('');
+    setBlogs(blogs.concat(newBlog))
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -69,6 +80,27 @@ const App = () => {
       </div>
   );
 
+
+  const CreateForm = () => {
+
+    return (
+      <div>
+        <h2>create new</h2>
+        <div>
+          title: <input type="text" value={title} onChange={({ target }) => { setTitle(target.value) }} />
+        </div>
+        <div>
+          author: <input type="text" value={author} onChange={({ target }) => { setAuthor(target.value) }} />
+        </div>
+        <div>
+          url: <input type="url" value={url} onChange={({ target }) => { setUrl(target.value) }} />
+        </div>
+        <button onClick={handleClick}>create</button>
+      </div>);
+  }
+
+
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -87,7 +119,13 @@ const App = () => {
   return (
     <div>
       {notification}
-      {user === null ? loginForm() : blogList()}
+      {user === null ? loginForm() :
+        <div>
+          {blogList()}
+          {CreateForm()}
+        </div>
+
+      }
     </div>
   )
 }
