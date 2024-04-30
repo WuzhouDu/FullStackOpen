@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Toggable'
+import CreateForm from './components/CreateForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,15 +12,10 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [notification, setNotification] = useState({ text: '', color: 'green' });
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
 
-  const handleClick = async () => {
+
+  const handleClick = async ({title, author, url}) => {
     const newBlog = await blogService.create({ title, author, url });
-    setAuthor('');
-    setTitle('');
-    setUrl('');
     setBlogs(blogs.concat(newBlog));
     setNotification({ color: "green", text: `a new blog ${newBlog.title} by ${newBlog.author}` });
     setTimeout(() => {
@@ -87,26 +83,6 @@ const App = () => {
   );
 
 
-  const CreateForm = () => {
-
-    return (
-      <div>
-        <h2>create new</h2>
-        <div>
-          title: <input type="text" value={title} onChange={({ target }) => { setTitle(target.value) }} />
-        </div>
-        <div>
-          author: <input type="text" value={author} onChange={({ target }) => { setAuthor(target.value) }} />
-        </div>
-        <div>
-          url: <input type="url" value={url} onChange={({ target }) => { setUrl(target.value) }} />
-        </div>
-        <button onClick={handleClick}>create</button>
-      </div>);
-  }
-
-
-
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -129,7 +105,7 @@ const App = () => {
         <div>
           {blogList()}
           <Togglable buttonLabel="create blog">
-            {CreateForm()}
+            <CreateForm handleClick={handleClick} />
           </Togglable>
         </div>
 
